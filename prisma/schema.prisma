@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+  // previewFeatures = ["postgresqlExtensions"]
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // extensions = [postgis]
+}
+
+enum AccountRole {
+  tenant
+  manager
+}
+
+model Account {
+  id         Int         @id @unique @default(autoincrement())
+  accountId  String      @default(uuid())
+  name       String
+  role       AccountRole
+  email      String      @unique
+  password   String
+  isActive   Boolean     @default(true)
+  isVerified Boolean     @default(false)
+}

@@ -1,4 +1,4 @@
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { PrismaClientKnownRequestError } from "../../generated/prisma/runtime/library";
 import { AccountCreateSchema, LoginSchema } from "../../types";
 import { db } from "../prisma";
 
