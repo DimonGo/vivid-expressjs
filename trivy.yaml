@@ -1,0 +1,14 @@
+ignorefile: .trivyignore
+ignore-policy: .trivyignore.rego
+
+allow-rules:
+  - id: localenv-dev-ssl
+    description: skip local dev ssl
+    path: ^certificates\/localhost-key.pem$
+
+severity:
+  - UNKNOWN
+  # - LOW
+  - MEDIUM
+  - HIGH
+  - CRITICAL

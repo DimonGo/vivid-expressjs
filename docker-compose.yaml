@@ -1,0 +1,39 @@
+services:
+  db:
+    # https://postgis.net/documentation/getting_started/install_docker/
+    # Postgresql with PostGIS extension inside.
+    image: postgis/postgis:17-3.5
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
+      - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    hostname: app-db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    networks:
+      - db
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+
+volumes:
+  app-db-data:
+
+networks:
+  db:
+    # Only for local development
+    driver: bridge

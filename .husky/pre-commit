@@ -1,0 +1,20 @@
+# Get staged files
+FILES=$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
+[ -z "$FILES" ] && exit 0
+
+# Lint each staged file
+# npx prettier "$FILES" --ignore-path ".husky/pre-commit" --ignore-unknown --write
+
+echo "$FILES" | xargs ./node_modules/.bin/prettier --ignore-unknown --write
+
+# Prettier
+
+# Stage files again after formatting
+echo "$FILES" | xargs git add
+
+
+# Gitleaks
+gitleaks dir .  --config=.gitleaks.toml -v --no-banner
+
+# Trivy
+npm run security-checks
