@@ -60,3 +60,5 @@ npm run seed
 ```shell
 npm run dev
 ```
+
+(Initial setup can be found [in this commit](https://github.com/DimonGo/vivid-expressjs/commit/8c303f88408067ea592d73f9d4bc7c3066a66dfc))

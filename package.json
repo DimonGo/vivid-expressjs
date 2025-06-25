@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Vivid app backend",
   "license": "ISC",
-  "author": "dmitiy904petrov@gmail.com",
+  "author": "dmitriy904petrov@gmail.com",
   "type": "commonjs",
   "main": "index.ts",
   "scripts": {
