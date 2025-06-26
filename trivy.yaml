@@ -1,4 +1,4 @@
-ignorefile: .trivyignore
+ignorefile: .trivyignore.yaml
 ignore-policy: .trivyignore.rego
 
 allow-rules:

@@ -2,7 +2,7 @@ services:
   db:
     # https://postgis.net/documentation/getting_started/install_docker/
     # Postgresql with PostGIS extension inside.
-    image: postgis/postgis:17-3.5
+    image: postgis/postgis:17-3.5 # fill free to change to the postgres without gis extension
     restart: always
     env_file:
       - .env
