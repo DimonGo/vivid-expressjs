@@ -7,36 +7,30 @@ export async function signup(account: AccountCreateSchema) {
     const newAccount = await db.account.create({
       data: account,
     });
+    const newUser = await db.user.create({
+      data: {
+        accountId: newAccount.accountId,
+        email: account.email,
+        name: account.name,
+      },
+    });
 
     if (newAccount instanceof PrismaClientKnownRequestError) {
       throw new Error(JSON.stringify(newAccount));
     }
 
     return {
-      accountInfo: newAccount,
+      accountInfo: newUser,
       success: true,
       message: `Created new account for ${account.email}`,
     };
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        console.error(
-          `Failed to create a new account. Email '${account.email}' already taken.`,
-        );
-        return {
-          accountInfo: {},
-          success: false,
-          message: `Failed to create a new account for ${account.email}. Email '${account.email}' already taken`,
-        };
-      }
-    } else {
-      console.error(error);
-      return {
-        accountInfo: {},
-        success: false,
-        message: `Failed to create a new account for ${account.email}. Error: ${JSON.stringify(error)}`,
-      };
-    }
+    console.error(error);
+    return {
+      accountInfo: {},
+      success: false,
+      message: `Failed to create a new account for ${account.email}. Error: ${JSON.stringify(error)}`,
+    };
   }
 }
 
@@ -62,17 +56,24 @@ export async function getAccountById(accountId: string) {
 
 export async function getCurrentUser(accountId: string) {
   try {
-    const currentUser = await db.account.findFirst({
-      where: {
-        accountId: accountId,
-      },
-    });
+    const [currentAccount, currentUser] = await Promise.all([
+      db.account.findFirst({
+        where: {
+          accountId,
+        },
+      }),
+      db.user.findFirst({
+        where: {
+          accountId,
+        },
+      }),
+    ]);
 
     if (!currentUser) {
       throw new Error("User not found");
     }
     return {
-      accountInfo: { ...currentUser, password: undefined },
+      accountInfo: { ...currentUser, ...currentAccount, password: undefined },
       success: true,
       status: 200,
     };
@@ -92,4 +93,14 @@ export async function getCurrentUser(accountId: string) {
       status: 500,
     };
   }
+}
+
+export async function getUserByEmail({ email }: { email: string }) {
+  const user = await db.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  return !!user;
 }

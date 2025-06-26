@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { getCurrentUser, signin, signup } from "../lib/prisma/queries";
+import {
+  getCurrentUser,
+  getUserByEmail,
+  signin,
+  signup,
+} from "../lib/prisma/queries";
 import { createAuthCookie, createJwtToken } from "../lib/utils";
 
 export const signupUser = async (
@@ -24,6 +29,13 @@ export const signupUser = async (
         if (role !== "manager" || "tenant") {
           throw new Error("Role must be 'manager' or 'tenant'");
         }
+    }
+
+    const existingUser = await getUserByEmail({ email });
+
+    if (existingUser) {
+      res.status(400).json({ message: "Email is already taken" });
+      return;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
