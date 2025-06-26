@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
   res.send("This is home route");
 });
 
-app.use("/", routes);
+app.use("/api", routes);
 
 // SERVER
 const port = Number(process.env.PORT) || 3001;

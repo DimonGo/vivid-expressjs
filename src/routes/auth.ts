@@ -9,8 +9,8 @@ import {
 
 export const authRouter = Router();
 
-authRouter.post("/api/auth/signup", signupUser);
-authRouter.post("/api/auth/signin", signinUser);
-authRouter.post("/api/auth/signout", verifyJwtToken, signOutUser);
+authRouter.post("/auth/signup", signupUser);
+authRouter.post("/auth/signin", signinUser);
+authRouter.post("/auth/signout", verifyJwtToken, signOutUser);
 
-authRouter.get("/api/users/me", verifyJwtToken, getUserAccountData);
+authRouter.get("/users/me", verifyJwtToken, getUserAccountData);

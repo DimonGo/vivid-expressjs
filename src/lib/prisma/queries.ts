@@ -66,6 +66,13 @@ export async function getCurrentUser(accountId: string) {
         where: {
           accountId,
         },
+        include: {
+          PurchasedProjects: {
+            select: {
+              id: true,
+            },
+          },
+        },
       }),
     ]);
 
